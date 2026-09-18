@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section id="home" class="hero-section">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <p class="eyebrow">Available for internships and junior roles</p>
+                <h1>{{ site_name }}</h1>
+                <p class="hero-title">{{ site_title }}</p>
+                <p class="lead">
+                    I build clean, reliable web applications with Python and Django.
+                    This site is a working example: models, forms, admin, and a
+                    production-ready deployment setup.
+                </p>
+                <div class="hero-actions">
+                    <a class="btn btn-accent" href="#projects">View Projects</a>
+                    <a class="btn btn-outline-accent" href="#contact">Contact Me</a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center">
+                <div class="profile-frame">
+                    <img src="{% static 'img/profile.svg' %}" alt="Professional profile placeholder for {{ site_name }}">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about" class="section">
+    <div class="container">
+        <div class="section-heading">
+            <p class="eyebrow">About me</p>
+            <h2>A Python developer focused on practical Django apps</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <p>
+                    I am a Python and Django developer who enjoys turning ideas into
+                    working web products. I care about readable code, simple user
+                    interfaces, and shipping projects that can actually be deployed.
+                </p>
+                <p>
+                    My current focus is backend development with Django: models,
+                    authentication, forms, REST APIs, and PostgreSQL. I also write
+                    the HTML, CSS, and JavaScript needed to present that work clearly.
+                </p>
+                <p>
+                    I am looking for roles where I can contribute to real products,
+                    learn from a team, and keep improving as a software engineer.
+                </p>
+                <a class="btn btn-accent" href="{% url 'download_resume' %}">
+                    <i class="bi bi-download me-2"></i>Download Resume
+                </a>
+            </div>
+            <div class="col-lg-5">
+                <div class="info-card">
+                    <h3>Focus areas</h3>
+                    <ul class="plain-list">
+                        <li>Django web applications</li>
+                        <li>REST APIs and relational data</li>
+                        <li>Clean UI with Bootstrap and CSS</li>
+                        <li>Git-based workflows and deployment</li>
+                    </ul>
+                    <p class="mb-0 location-line">
+                        <i class="bi bi-geo-alt me-2"></i>{{ site_location }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="skills" class="section section-alt">
+    <div class="container">
+        <div class="section-heading">
+            <p class="eyebrow">Skills</p>
+            <h2>Tools I use to ship Python web apps</h2>
+        </div>
+        <div class="row g-4">
+            {% for skill in skills %}
+            <div class="col-md-6 col-xl-4">
+                <article class="skill-card">
+                    <div class="skill-icon"><i class="bi {{ skill.icon_class|default:'bi-code-slash' }}"></i></div>
+                    <div>
+                        <h3>{{ skill.name }}</h3>
+                        <p>{{ skill.description }}</p>
+                        <div class="progress" role="progressbar" aria-valuenow="{{ skill.proficiency }}" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar" style="width: {{ skill.proficiency }}%"></div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% empty %}
+            <p>Add skills from the Django admin to populate this section.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section id="projects" class="section">
+    <div class="container">
+        <div class="section-heading">
+            <p class="eyebrow">Projects</p>
+            <h2>Selected work from the database</h2>
+        </div>
+        <div class="row g-4">
+            {% for project in projects %}
+            <div class="col-md-6 col-xl-4">
+                <article class="project-card">
+                    {% if project.image %}
+                    <img class="project-image" src="{{ project.image.url }}" alt="{{ project.title }}">
+                    {% else %}
+                    <div class="project-image placeholder-image">
+                        <span>{{ project.title|truncatechars:18 }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="project-body">
+                        <h3>{{ project.title }}</h3>
+                        <p>{{ project.description }}</p>
+                        <div class="tech-row">
+                            {% for tech in project.technology_list %}
+                            <span class="tech-chip">{{ tech }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="project-links">
+                            {% if project.github_url %}
+                            <a href="{{ project.github_url }}" target="_blank" rel="noopener">GitHub</a>
+                            {% endif %}
+                            {% if project.live_url %}
+                            <a href="{{ project.live_url }}" target="_blank" rel="noopener">Live demo</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% empty %}
+            <p>Add featured projects in Django admin to display them here.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section id="education" class="section section-alt">
+    <div class="container">
+        <div class="section-heading">
+            <p class="eyebrow">Education</p>
+            <h2>Learning path</h2>
+        </div>
+        <div class="timeline">
+            {% for item in education %}
+            <article class="timeline-card">
+                <p class="timeline-date">{{ item.start_year }} — {{ item.end_year }}</p>
+                <h3>{{ item.degree }}{% if item.field_of_study %} in {{ item.field_of_study }}{% endif %}</h3>
+                <p class="timeline-school">{{ item.school }}</p>
+                {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+            </article>
+            {% empty %}
+            <p>Add education entries in Django admin.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section id="certifications" class="section">
+    <div class="container">
+        <div class="section-heading">
+            <p class="eyebrow">Certifications</p>
+            <h2>Courses and credentials</h2>
+        </div>
+        <div class="row g-4">
+            {% for cert in certifications %}
+            <div class="col-md-6 col-lg-4">
+                <article class="cert-card">
+                    <p class="eyebrow">{{ cert.organization }}</p>
+                    <h3>{{ cert.name }}</h3>
+                    <p>{{ cert.issue_date|date:"M Y" }}</p>
+                    {% if cert.credential_url %}
+                    <a href="{{ cert.credential_url }}" target="_blank" rel="noopener">View certificate</a>
+                    {% endif %}
+                </article>
+            </div>
+            {% empty %}
+            <p>Add certifications in Django admin.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section id="contact" class="section section-alt">
+    <div class="container">
+        <div class="section-heading">
+            <p class="eyebrow">Contact</p>
+            <h2>Let’s talk about a project or role</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <div class="info-card">
+                    <h3>Direct contact</h3>
+                    <p>Messages submitted here are stored in the Django database and appear in the admin inbox.</p>
+                    <p><i class="bi bi-envelope me-2"></i><a href="mailto:{{ site_email }}">{{ site_email }}</a></p>
+                    <p class="mb-0"><i class="bi bi-github me-2"></i><a href="{{ site_github }}" target="_blank" rel="noopener">GitHub profile</a></p>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                <form method="post" novalidate class="contact-form">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_name">Name</label>
+                            {{ form.name }}
+                            {{ form.name.errors }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_email">Email</label>
+                            {{ form.email }}
+                            {{ form.email.errors }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="id_subject">Subject</label>
+                            {{ form.subject }}
+                            {{ form.subject.errors }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="id_message">Message</label>
+                            {{ form.message }}
+                            {{ form.message.errors }}
+                        </div>
+                    </div>
+                    <button class="btn btn-accent mt-4" type="submit">Send message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
